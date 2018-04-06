@@ -1,5 +1,6 @@
 package GUI;
 
+import Pieces.Play;
 import Pieces.PlayingPiece;
 import Pieces.Table;
 
@@ -8,15 +9,22 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static javax.swing.SwingUtilities.isLeftMouseButton;
+import static javax.swing.SwingUtilities.isRightMouseButton;
+
 public class TableGUI {
     private final JFrame gameFrame;
     private final BoardPanel boardPanel;
+
+    private PlayingPiece sourceTile;
 
     private final static Dimension OUTER_FRAME_DIMENSION = new Dimension(600, 600);
     private final static Dimension BOARD_PANEL_DIMENSION = new Dimension(400, 350);
@@ -89,6 +97,17 @@ public class TableGUI {
             setPreferredSize(BOARD_PANEL_DIMENSION);
             validate();
         }
+
+        public void drawBoard() {
+            removeAll();
+            for (int i = 0; i < boardTiles.size(); i++) {
+                boardTiles.get(i).drawTile();
+                add(boardTiles.get(i));
+            }
+            validate();
+            repaint();
+        }
+
     }
 
     private class TilePanel extends JPanel {
@@ -102,7 +121,85 @@ public class TableGUI {
             setPreferredSize(TILE_PANEL_DIMENSION);
             assignTileColor();
             assignTilePieceIcon();
+
+            addMouseListener(new MouseListener() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    //десен бутон се използва за да деселектираш дадено поле, в случай че
+                    // искаш да направиш друг ход, а не този, който си започнал
+                    if (isRightMouseButton(e)) {
+                        sourceTile = null;
+                    } else if (isLeftMouseButton(e)) {
+                        if (sourceTile == null) {
+                            //ако е първото натискане на ляв бутон, значи избираш фигурата,
+                            // която искаш да поместиш
+                            sourceTile = Table.getObject(tileX, tileY);
+                            if (sourceTile == null || sourceTile == Table.getEmptyObject()) {
+                                sourceTile = null;
+
+                            }
+                        } else {
+                            //ако е второто натискане, избираш мястото, на което да бъде
+                            // поместена фигурата
+                            Play.tryToMakeMove(sourceTile.getX(), sourceTile.getY(), tileX, tileY);
+                            boardPanel.drawBoard();
+
+                            if (Play.madeMove) {
+                                //това са позициите на двата бутона в листа boardTiles
+                                int tileIndex=sourceTile.getX() * 8 + sourceTile.getY();
+                                int newTileIndex=tileX * 8 + tileY;
+                                //в boardTiles слагаме бутона, съдържат фигурага за местене, на
+                                // мястото на бутона, съдържащ мястото, на което да бъде преместена
+                                boardPanel.boardTiles.add(newTileIndex
+                                        , boardPanel.boardTiles.get(tileIndex));
+                                //премахваме бутона от старото му място в boardTiles
+                                boardPanel.boardTiles.remove(tileIndex);
+                                boardPanel.drawBoard();
+                            }
+                            Play.madeMove = false;
+                            sourceTile = null;
+
+                        }
+                        /*
+                        SwingUtilities.invokeLater(new Runnable() {
+                            @Override
+                            public void run() {
+                                boardPanel.drawBoard(board);
+                            }
+                        });
+                        */
+                    }
+                }
+
+                @Override
+                public void mousePressed(MouseEvent e) {
+
+                }
+
+                @Override
+                public void mouseReleased(MouseEvent e) {
+
+                }
+
+                @Override
+                public void mouseEntered(MouseEvent e) {
+
+                }
+
+                @Override
+                public void mouseExited(MouseEvent e) {
+
+                }
+            });
+
             validate();
+        }
+
+        public void drawTile() {
+            assignTileColor();
+            assignTilePieceIcon();
+            validate();
+            repaint();
         }
 
         private void assignTileColor() {
@@ -124,7 +221,7 @@ public class TableGUI {
                      в която се намират иконите(съхранена в променливата pieceIconPath),добавя
                      първата буква на цвета, първите 2 букви на името на класа и накрая .gif
                     */
-                    final BufferedImage image = ImageIO.read(new File(pieceIconPath
+                    BufferedImage image = ImageIO.read(new File(pieceIconPath
                             + tablePiece.getColor().substring(0, 1).toUpperCase()
                             + tablePiece.getClass().getSimpleName().substring(0, 2).toUpperCase()
                             + ".gif"));

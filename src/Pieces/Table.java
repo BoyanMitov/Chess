@@ -58,21 +58,23 @@ public class Table {
             if (table[fromX][fromY].moveIsLegal(toX, toY)) {
                 if (!getObject(toX, toY).getColor().equals(color)) {
                     takePiece(toX, toY);
+                    Play.madeMove = true;
                 }
                 table[fromX][fromY].move(toX, toY);
                 PlayingPiece swap = table[fromX][fromY];
                 table[fromX][fromY] = table[toX][toY];
                 table[toX][toY] = swap;
+                Play.madeMove = true;
             } else {
                 System.out.println("Can't go there!");
-//                Pieces.Play.turn--;
+                Play.turn--;
             }
-        } else if(!color.equals("none")){
+        } else if (!color.equals("none")) {
             System.out.println("It's not your turn!");
-//            Pieces.Play.turn--;
-        }else {
+            Play.turn--;
+        } else {
             System.out.println("That's empty!Try again.");
-//            Pieces.Play.turn--;
+            Play.turn--;
         }
     }
 
@@ -140,7 +142,7 @@ public class Table {
                             moveKingBack(row, col, x, y);
                         }
                     } else if (!table[row][col].getColor().equals(table[x][y].getColor())) {
-                        hasOpenSpace=true;
+                        hasOpenSpace = true;
                         PlayingPiece king = table[x][y];
                         table[x][y] = empty;
                         PlayingPiece takenEnemy = table[row][col];
@@ -150,17 +152,17 @@ public class Table {
                         if (!enemyCanReachChessMate(row, col, enemy)) {
                             //table[x][y] = king;
                             //table[row][col] = takenEnemy;
-                            moveKingBack(king, takenEnemy,enemy, row, col, x, y);
+                            moveKingBack(king, takenEnemy, enemy, row, col, x, y);
                             return false;
                         }
                         //table[x][y] = king;
                         //table[row][col] = takenEnemy;
-                        moveKingBack(king, takenEnemy,enemy, row, col, x, y);
+                        moveKingBack(king, takenEnemy, enemy, row, col, x, y);
                     }
                 }
             }
         }
-        if(!hasOpenSpace){
+        if (!hasOpenSpace) {
             return false;
         }
         return true;
@@ -177,7 +179,7 @@ public class Table {
     }
 
     private static void moveKingBack(PlayingPiece king, PlayingPiece takenEnemy
-            ,ArrayList<PlayingPiece> enemies, int row, int col, int kingX, int kingY) {
+            , ArrayList<PlayingPiece> enemies, int row, int col, int kingX, int kingY) {
         table[kingX][kingY] = king;
         table[row][col] = takenEnemy;
         enemies.add(takenEnemy);

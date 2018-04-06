@@ -1,4 +1,4 @@
-package Chess;
+package Pieces;
 
 public class Queen extends PlayingPiece {
     public Queen(String color) {

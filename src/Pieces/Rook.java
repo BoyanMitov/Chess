@@ -1,9 +1,4 @@
-package Chess;
-
-import javafx.print.PageLayout;
-import javafx.scene.control.Tab;
-
-import java.util.ArrayList;
+package Pieces;
 
 public class Rook extends PlayingPiece {
 

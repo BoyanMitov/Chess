@@ -1,4 +1,4 @@
-package Chess;
+package Pieces;
 
 import java.util.ArrayList;
 
@@ -10,6 +10,7 @@ public class Table {
     private static ArrayList<PlayingPiece> aliveBlacks = new ArrayList<>();
     private static PlayingPiece kingWhite;
     private static PlayingPiece kingBlack;
+
 
     public Table() {
         createTable();
@@ -64,14 +65,14 @@ public class Table {
                 table[toX][toY] = swap;
             } else {
                 System.out.println("Can't go there!");
-                Play.turn--;
+//                Pieces.Play.turn--;
             }
         } else if(!color.equals("none")){
             System.out.println("It's not your turn!");
-            Play.turn--;
+//            Pieces.Play.turn--;
         }else {
             System.out.println("That's empty!Try again.");
-            Play.turn--;
+//            Pieces.Play.turn--;
         }
     }
 

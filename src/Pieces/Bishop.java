@@ -1,4 +1,4 @@
-package Chess;
+package Pieces;
 
 public class Bishop extends PlayingPiece {
     public Bishop(String color) {

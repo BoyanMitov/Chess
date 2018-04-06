@@ -1,4 +1,4 @@
-package Chess;
+package Pieces;
 
 public class Pawn extends PlayingPiece {
     private int startX;

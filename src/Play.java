@@ -1,4 +1,4 @@
-package Pieces;
+
 
 import java.util.Scanner;
 
@@ -6,6 +6,7 @@ public class Play {
     static int turn = 1;
 
     public static void main(String[] args) {
+        /*
         Pawn pawn1White = new Pawn("white");
         Pawn pawn2White = new Pawn("white");
         Pawn pawn3White = new Pawn("white");
@@ -41,8 +42,10 @@ public class Play {
         Bishop bishop2Black = new Bishop("black");
         King kingBlack = new King("black");
         Queen queenBlack = new Queen("black");
+*/
+        GUI.Table table= new GUI.Table();
 
-        Table.createTable();
+        /*Table.createTable();
         Table.printTable();
 
         Scanner input = new Scanner(System.in);
@@ -121,6 +124,7 @@ public class Play {
             }
         }
         return 0;
+        */
     }
 }
 

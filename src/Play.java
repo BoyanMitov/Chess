@@ -1,12 +1,12 @@
 
 
-import java.util.Scanner;
+import GUI.TableGUI;
+import Pieces.*;
 
 public class Play {
     static int turn = 1;
 
     public static void main(String[] args) {
-        /*
         Pawn pawn1White = new Pawn("white");
         Pawn pawn2White = new Pawn("white");
         Pawn pawn3White = new Pawn("white");
@@ -42,11 +42,14 @@ public class Play {
         Bishop bishop2Black = new Bishop("black");
         King kingBlack = new King("black");
         Queen queenBlack = new Queen("black");
-*/
-        GUI.Table table= new GUI.Table();
 
-        /*Table.createTable();
-        Table.printTable();
+
+        Table table=new Table();
+        TableGUI tableGUI= new TableGUI();
+
+
+        /*TableGUI.createTable();
+        TableGUI.printTable();
 
         Scanner input = new Scanner(System.in);
         int x;
@@ -94,8 +97,8 @@ public class Play {
             newX = input.nextInt();
             System.out.print("Insert new position Y:");
             newY = input.nextInt();
-            Table.play(Table.getObject(x, y).getColor(), currentColor, x, y, newX, newY);
-            Table.printTable();
+            TableGUI.play(TableGUI.getObject(x, y).getColor(), currentColor, x, y, newX, newY);
+            TableGUI.printTable();
 
             if (isCheckMateOrChess(currentKing) == 1 || isCheckMateOrChess(currentKing) == 2) {
                 if (currentColor.equals("white")) {
@@ -111,15 +114,15 @@ public class Play {
 
     private static int isCheckMateOrChess(PlayingPiece king) {
         if (king.getColor().equals("white")) {
-            if (Table.isChessMateWhites(king.getX(), king.getY())) {
+            if (TableGUI.isChessMateWhites(king.getX(), king.getY())) {
                 return 1;
-            } else if (Table.isChessWhites(king.getX(), king.getY())) {
+            } else if (TableGUI.isChessWhites(king.getX(), king.getY())) {
                 return 2;
             }
         } else if(king.getColor().equals("black")){
-            if (Table.isChessMateBlacks(king.getX(), king.getY())) {
+            if (TableGUI.isChessMateBlacks(king.getX(), king.getY())) {
                 return 1;
-            } else if (Table.isChessBlacks(king.getX(), king.getY())) {
+            } else if (TableGUI.isChessBlacks(king.getX(), king.getY())) {
                 return 2;
             }
         }

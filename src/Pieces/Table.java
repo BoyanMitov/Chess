@@ -16,10 +16,6 @@ public class Table {
         createTable();
     }
 
-    public static PlayingPiece[][] getTable(){
-        return table;
-    }
-
     public static void setStartingPosition(int x, int y, PlayingPiece piece) {
         piece.setX(x);
         piece.setY(y);

@@ -1,4 +1,4 @@
-package Chess;
+package Pieces;
 
 import java.util.Scanner;
 

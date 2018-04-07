@@ -6,6 +6,7 @@ import Pieces.Table;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -129,6 +130,7 @@ public class TableGUI {
                     // искаш да направиш друг ход, а не този, който си започнал
                     if (isRightMouseButton(e)) {
                         sourceTile = null;
+                        clearBorder();
                     } else if (isLeftMouseButton(e)) {
                         if (sourceTile == null) {
                             //ако е първото натискане на ляв бутон, значи избираш фигурата,
@@ -136,9 +138,11 @@ public class TableGUI {
                             sourceTile = Table.getObject(tileX, tileY);
                             if (sourceTile == null || sourceTile == Table.getEmptyObject()) {
                                 sourceTile = null;
-
+                            }else{
+                                assignTileBorder();
                             }
                         } else {
+
                             //ако е второто натискане, избираш мястото, на което да бъде
                             // поместена фигурата
                             Play.tryToMakeMove(sourceTile.getX(), sourceTile.getY(), tileX, tileY);
@@ -205,10 +209,21 @@ public class TableGUI {
         private void assignTileColor() {
             if (this.tileX % 2 == 0) {
                 setBackground(this.tileY % 2 == 0 ? lightTileColor : darkTileColor);
+
             } else if (tileX % 2 != 0) {
                 setBackground(this.tileY % 2 != 0 ? lightTileColor : darkTileColor);
             }
+
         }
+
+        private void assignTileBorder(){
+            setBorder(new LineBorder(Color.GREEN, 5));
+        }
+
+        private void clearBorder(){
+            setBorder(null);
+        }
+
 
         private void assignTilePieceIcon() {
             this.removeAll();

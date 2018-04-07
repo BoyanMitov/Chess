@@ -129,8 +129,11 @@ public class TableGUI {
                     //десен бутон се използва за да деселектираш дадено поле, в случай че
                     // искаш да направиш друг ход, а не този, който си започнал
                     if (isRightMouseButton(e)) {
+                        if (sourceTile != null) {
+                            clearBorder(boardPanel.boardTiles.get(sourceTile.getX() * 8 + sourceTile.getY()));
+                        }
+
                         sourceTile = null;
-                        clearBorder();
                     } else if (isLeftMouseButton(e)) {
                         if (sourceTile == null) {
                             //ако е първото натискане на ляв бутон, значи избираш фигурата,
@@ -138,20 +141,22 @@ public class TableGUI {
                             sourceTile = Table.getObject(tileX, tileY);
                             if (sourceTile == null || sourceTile == Table.getEmptyObject()) {
                                 sourceTile = null;
-                            }else{
+                            } else {
                                 assignTileBorder();
                             }
                         } else {
 
                             //ако е второто натискане, избираш мястото, на което да бъде
                             // поместена фигурата
+                            clearBorder(boardPanel.boardTiles.get(sourceTile.getX() * 8 + sourceTile.getY()));
                             Play.tryToMakeMove(sourceTile.getX(), sourceTile.getY(), tileX, tileY);
+
                             boardPanel.drawBoard();
 
                             if (Play.madeMove) {
-                                //това са позициите на двата бутона в листа boardTiles
-                                int tileIndex=sourceTile.getX() * 8 + sourceTile.getY();
-                                int newTileIndex=tileX * 8 + tileY;
+                                //това са индексите на двата бутона в листа boardTiles
+                                int tileIndex = sourceTile.getX() * 8 + sourceTile.getY();
+                                int newTileIndex = tileX * 8 + tileY;
                                 //в boardTiles слагаме бутона, съдържат фигурага за местене, на
                                 // мястото на бутона, съдържащ мястото, на което да бъде преместена
                                 boardPanel.boardTiles.add(newTileIndex
@@ -216,12 +221,12 @@ public class TableGUI {
 
         }
 
-        private void assignTileBorder(){
+        private void assignTileBorder() {
             setBorder(new LineBorder(Color.GREEN, 5));
         }
 
-        private void clearBorder(){
-            setBorder(null);
+        private void clearBorder(TilePanel tilePanel) {
+            tilePanel.setBorder(null);
         }
 
 

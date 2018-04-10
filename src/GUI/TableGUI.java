@@ -22,7 +22,7 @@ import static javax.swing.SwingUtilities.isLeftMouseButton;
 import static javax.swing.SwingUtilities.isRightMouseButton;
 
 public class TableGUI {
-    private final JFrame gameFrame;
+    private static JFrame gameFrame;
     private final BoardPanel boardPanel;
 
     private PlayingPiece sourceTile;
@@ -47,6 +47,27 @@ public class TableGUI {
         this.gameFrame.setVisible(true);
     }
 
+    public static void endGame(String winner) {
+        Object[] options = {"Start new game",
+                "Exit",};
+        int n = JOptionPane.showOptionDialog(gameFrame,
+                winner + " wins",
+                "Game over",
+                JOptionPane.YES_NO_CANCEL_OPTION,
+                JOptionPane.QUESTION_MESSAGE,
+                null,
+                options,
+                options[1]);
+
+        if (n == JOptionPane.YES_OPTION) {
+            Table.resetTable();
+
+        } else if (n == JOptionPane.NO_OPTION) {
+            System.exit(0);
+        }
+
+    }
+
     private JMenuBar createTableMenuBar() {
         final JMenuBar tableMenuBar = new JMenuBar();
         tableMenuBar.add(createFileMenu());
@@ -55,14 +76,14 @@ public class TableGUI {
 
     private JMenu createFileMenu() {
         final JMenu fileMenu = new JMenu("File");
-        final JMenuItem openPGN = new JMenuItem("Load Game");
+        final JMenuItem newGameMenuItem = new JMenuItem("New Game");
         final JMenuItem exitMenuItem = new JMenuItem("Exit");
 
-        //pgn is the game file , so you can open already existing game file
-        openPGN.addActionListener(new ActionListener() {
+        newGameMenuItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println("open up that pgn file!");
+                Table.resetTable();
+                boardPanel.drawBoard();
             }
         });
 
@@ -74,7 +95,7 @@ public class TableGUI {
             }
         });
 
-        fileMenu.add(openPGN);
+        fileMenu.add(newGameMenuItem);
         fileMenu.add(exitMenuItem);
         return fileMenu;
     }
@@ -107,7 +128,6 @@ public class TableGUI {
             validate();
             repaint();
         }
-
     }
 
     private class TilePanel extends JPanel {

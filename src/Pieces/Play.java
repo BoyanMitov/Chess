@@ -2,6 +2,8 @@ package Pieces;
 
 import GUI.TableGUI;
 
+import java.util.ArrayList;
+
 public class Play {
     public static int turn = 1;
     public static boolean madeMove;
@@ -23,6 +25,7 @@ public class Play {
 
             if (chessResult == 1) {
                 System.out.println("? Game over! Black wins.");
+                TableGUI.endGame("Blacks");
             } else if (chessResult == 2) {
                 System.out.println("? Chess! Move or you'll lose.");
             }
@@ -31,6 +34,7 @@ public class Play {
 
             if (chessResult == 1) {
                 System.out.println("? Game over! White wins.");
+                TableGUI.endGame("Whites");
             } else if (chessResult == 2) {
                 System.out.println("? Chess! Move or you'll lose.");
             }
@@ -71,8 +75,10 @@ public class Play {
         if (isCheckMateOrChess(currentKing) == 1 || isCheckMateOrChess(currentKing) == 2) {
             if (currentColor.equals("white")) {
                 System.out.println("2 Game over! Black wins.");
+                TableGUI.endGame("Blacks");
             } else {
                 System.out.println("2 Game over! White wins.");
+                TableGUI.endGame("Whites");
             }
         }
 
@@ -96,7 +102,7 @@ public class Play {
         return 0;
     }
 
-    private static void setPieces() {
+    public static void setPieces() {
         //TODO try to do this in some other way
         Pawn pawn1White = new Pawn("white");
         Pawn pawn2White = new Pawn("white");
@@ -131,6 +137,14 @@ public class Play {
         Bishop bishop1Black = new Bishop("black");
         Bishop bishop2Black = new Bishop("black");
         Queen queenBlack = new Queen("black");
+    }
+
+    public static void setKingWhite(King kingWhite) {
+        Play.kingWhite = kingWhite;
+    }
+
+    public static void setKingBlack(King kingBlack) {
+        Play.kingBlack = kingBlack;
     }
 }
 

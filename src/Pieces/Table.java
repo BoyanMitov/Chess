@@ -16,6 +16,14 @@ public class Table {
         createTable();
     }
 
+    public static void resetTable(){
+        table=new PlayingPiece[8][8];
+        Play.setPieces();
+        Play.setKingWhite(new King("white"));
+        Play.setKingBlack(new King("black"));
+        createTable();
+    }
+
     public static void setStartingPosition(int x, int y, PlayingPiece piece) {
         piece.setX(x);
         piece.setY(y);

@@ -14,49 +14,68 @@ public class Play {
         TableGUI tableGUI = new TableGUI();
     }
 
-    public static void tryToMakeMove(int x, int y, int newX, int newY) {
-        String currentColor;
-        PlayingPiece currentKing;
+    public static void firstCheck() {
+        int originalTurn = Play.turn;
         int chessResult;
 
-        Table.printTable();
         if (turn % 2 == 1) {
-            currentColor = "white";
-            currentKing = kingWhite;
             chessResult = isCheckMateOrChess(kingWhite);
 
             if (chessResult == 1) {
-                System.out.println("Game over! Black wins.");
+                System.out.println("? Game over! Black wins.");
             } else if (chessResult == 2) {
-                System.out.println("Chess! Move or you'll lose.");
+                System.out.println("? Chess! Move or you'll lose.");
             }
+        } else {
+            chessResult = isCheckMateOrChess(kingBlack);
+
+            if (chessResult == 1) {
+                System.out.println("? Game over! White wins.");
+            } else if (chessResult == 2) {
+                System.out.println("? Chess! Move or you'll lose.");
+            }
+        }
+
+        Play.turn = originalTurn;
+        madeMove = false;
+    }
+
+    public static boolean isSameColor(int x, int y) {
+        if (turn % 2 == 1 && Table.getObject(x, y).getColor().equals("white")) {
+            return true;
+        } else if (turn % 2 == 0 && Table.getObject(x, y).getColor().equals("black")) {
+            return true;
+        }
+        return false;
+    }
+
+    public static void tryToMakeMove(int x, int y, int newX, int newY) {
+        String currentColor;
+        PlayingPiece currentKing;
+
+        if (turn % 2 == 1) {
+            currentColor = "white";
+            currentKing = kingWhite;
 
             System.out.println("White's turn");
         } else {
             currentKing = kingBlack;
-            chessResult = isCheckMateOrChess(kingBlack);
-
-            if (chessResult == 1) {
-                System.out.println("Game over! White wins.");
-            } else if (chessResult == 2) {
-                System.out.println("Chess! Move or you'll lose.");
-            }
 
             System.out.println("Black's turn");
             currentColor = "black";
         }
-        System.out.println(currentColor);
+
         Table.play(Table.getObject(x, y).getColor(), currentColor, x, y, newX, newY);
         Table.printTable();
 
-
         if (isCheckMateOrChess(currentKing) == 1 || isCheckMateOrChess(currentKing) == 2) {
             if (currentColor.equals("white")) {
-                System.out.println("Game over! Black wins.");
+                System.out.println("2 Game over! Black wins.");
             } else {
-                System.out.println("Game over! White wins.");
+                System.out.println("2 Game over! White wins.");
             }
         }
+
         turn++;
     }
 
@@ -77,7 +96,7 @@ public class Play {
         return 0;
     }
 
-    private static void setPieces(){
+    private static void setPieces() {
         //TODO try to do this in some other way
         Pawn pawn1White = new Pawn("white");
         Pawn pawn2White = new Pawn("white");

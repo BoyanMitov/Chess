@@ -85,8 +85,7 @@ public class TableGUI {
         BoardPanel() {
             super(new GridLayout(8, 8));
             this.boardTiles = new ArrayList<>();
-            // тук трябва да има for до BoardUtils ,но при нас дъската не е чертана в arrayList
-//            for (int i = 0; i <BoardUtils.NUM_TILES ; i++)
+
             for (int row = 0; row < 8; row++) {
                 for (int col = 0; col < 8; col++) {
                     final TilePanel tilePanel = new TilePanel(this, row, col);
@@ -132,7 +131,6 @@ public class TableGUI {
                         if (sourceTile != null) {
                             clearBorder(boardPanel.boardTiles.get(sourceTile.getX() * 8 + sourceTile.getY()));
                         }
-
                         sourceTile = null;
                     } else if (isLeftMouseButton(e)) {
                         if (sourceTile == null) {
@@ -143,13 +141,16 @@ public class TableGUI {
                                 sourceTile = null;
                             } else {
                                 assignTileBorder();
+                                Play.firstCheck();
                             }
                         } else {
-
                             //ако е второто натискане, избираш мястото, на което да бъде
                             // поместена фигурата
                             clearBorder(boardPanel.boardTiles.get(sourceTile.getX() * 8 + sourceTile.getY()));
-                            Play.tryToMakeMove(sourceTile.getX(), sourceTile.getY(), tileX, tileY);
+
+                            if (!Play.isSameColor(tileX, tileY) && sourceTile.moveIsLegal(tileX, tileY)) {
+                                Play.tryToMakeMove(sourceTile.getX(), sourceTile.getY(), tileX, tileY);
+                            }
 
                             boardPanel.drawBoard();
 
@@ -159,8 +160,7 @@ public class TableGUI {
                                 int newTileIndex = tileX * 8 + tileY;
                                 //в boardTiles слагаме бутона, съдържат фигурага за местене, на
                                 // мястото на бутона, съдържащ мястото, на което да бъде преместена
-                                boardPanel.boardTiles.add(newTileIndex
-                                        , boardPanel.boardTiles.get(tileIndex));
+                                boardPanel.boardTiles.add(newTileIndex, boardPanel.boardTiles.get(tileIndex));
                                 //премахваме бутона от старото му място в boardTiles
                                 boardPanel.boardTiles.remove(tileIndex);
                                 boardPanel.drawBoard();
@@ -169,14 +169,6 @@ public class TableGUI {
                             sourceTile = null;
 
                         }
-                        /*
-                        SwingUtilities.invokeLater(new Runnable() {
-                            @Override
-                            public void run() {
-                                boardPanel.drawBoard(board);
-                            }
-                        });
-                        */
                     }
                 }
 
@@ -218,7 +210,6 @@ public class TableGUI {
             } else if (tileX % 2 != 0) {
                 setBackground(this.tileY % 2 != 0 ? lightTileColor : darkTileColor);
             }
-
         }
 
         private void assignTileBorder() {

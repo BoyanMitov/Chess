@@ -115,30 +115,23 @@ public class Table {
         for (int row = x - 1; row <= x + 1; row++) {
             for (int col = y - 1; col <= y + 1; col++) {
                 if (row >= 0 && col >= 0 && row <= 7 && col <= 7) {
-                    //System.out.println("x = "+row+" y = "+col);
                     if (table[row][col] == empty) {
                         hasOpenSpace = true;
                         temporaryMoveKing(row, col, x, y);
 
                         if (row != x || col != y) {
-                            //System.out.println(!enemyCanReachChessMate(row, col, enemy));
                             if (!enemyCanReachChessMate(row, col, enemy)) {
-                                //table[x][y] = table[row][col];
-                                //table[row][col] = empty;
+
                                 moveKingBack(row, col, x, y);
                                 return false;
                             }
                         } else {
                             if (ally.size() > 1 && !enemyCanReachChessMate(row, col, enemy)) {
-                                //table[x][y] = table[row][col];
-                                //table[row][col] = empty;
                                 moveKingBack(row, col, x, y);
                                 return false;
                             }
                         }
                         if (table[x][y] == empty) {
-                            //table[x][y] = table[row][col];
-                            //table[row][col] = empty;
                             moveKingBack(row, col, x, y);
                         }
                     } else if (!table[row][col].getColor().equals(table[x][y].getColor())) {
@@ -150,13 +143,9 @@ public class Table {
                         table[row][col] = king;
 
                         if (!enemyCanReachChessMate(row, col, enemy)) {
-                            //table[x][y] = king;
-                            //table[row][col] = takenEnemy;
                             moveKingBack(king, takenEnemy, enemy, row, col, x, y);
                             return false;
                         }
-                        //table[x][y] = king;
-                        //table[row][col] = takenEnemy;
                         moveKingBack(king, takenEnemy, enemy, row, col, x, y);
                     }
                 }
@@ -236,32 +225,13 @@ public class Table {
                 }
                 PlayingPiece.setIsOnlyTesting(true);
                 if (ally.get(i).moveIsLegal(enemyX, enemyY)) {
-                    /*
-                    PlayingPiece swap = table[allyX][allyY];
-                    table[allyX][allyY] = table[enemyX][enemyY];
-                    ally.get(i).move(enemyX, enemyY);
-                    table[enemyX][enemyY] = swap;
-                    */
                     tempMoveAlly(ally.get(i), allyX, allyY, enemyX, enemyY);
 
                     if (!allyOrEnemyCanReach(kingAlly.getX(), kingAlly.getY(), enemies)) {
-                        //System.out.println("saved you"+ally.get(i).getSymbol());
-                        /*
-                        swap = table[allyX][allyY];
-                        table[allyX][allyY] = table[enemyX][enemyY];
-                        ally.get(i).move(allyX, allyY);
-                        table[enemyX][enemyY] = swap;
-                        */
                         moveAllyBack(ally.get(i), allyX, allyY, enemyX, enemyY);
                         return true;
                     }
 
-                    /*
-                    swap = table[allyX][allyY];
-                    table[allyX][allyY] = table[enemyX][enemyY];
-                    ally.get(i).move(allyX, allyY);
-                    table[enemyX][enemyY] = swap;
-                    */
                     moveAllyBack(ally.get(i), allyX, allyY, enemyX, enemyY);
                 }
                 PlayingPiece.setIsOnlyTesting(false);

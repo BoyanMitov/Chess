@@ -255,7 +255,7 @@ public class TableGUI {
                     BufferedImage image = ImageIO.read(new File(pieceIconPath
                             + tablePiece.getColor().substring(0, 1).toUpperCase()
                             + tablePiece.getClass().getSimpleName().substring(0, 2).toUpperCase()
-                            + ".gif"));
+                            + ".png"));
                     add(new JLabel(new ImageIcon(image)));
                 } catch (IOException e) {
                     e.printStackTrace();

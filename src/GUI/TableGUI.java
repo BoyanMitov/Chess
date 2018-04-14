@@ -31,8 +31,9 @@ public class TableGUI {
     private final static Dimension BOARD_PANEL_DIMENSION = new Dimension(400, 350);
     private final static Dimension TILE_PANEL_DIMENSION = new Dimension(10, 10);
 
-    private final Color lightTileColor = Color.decode("#FFFACD");
-    private final Color darkTileColor = Color.decode("#593E1A");
+    private final Color darkTileColor = new Color(65,43,37);
+    private final Color lightTileColor = new Color(170,143,119);
+
 
     private static String pieceIconPath = "art/pieces/";
 
@@ -51,7 +52,7 @@ public class TableGUI {
         Object[] options = {"Start new game",
                 "Exit",};
         int n = JOptionPane.showOptionDialog(gameFrame,
-                winner + " wins",
+                winner + " win",
                 "Game over",
                 JOptionPane.YES_NO_CANCEL_OPTION,
                 JOptionPane.QUESTION_MESSAGE,
@@ -64,9 +65,15 @@ public class TableGUI {
 
         } else if (n == JOptionPane.NO_OPTION) {
             System.exit(0);
+        }else{
+            System.exit(0);
         }
-
     }
+
+    public static void checkMateMessage(String message) {
+        JOptionPane.showMessageDialog(null,message);
+    }
+
 
     private JMenuBar createTableMenuBar() {
         final JMenuBar tableMenuBar = new JMenuBar();
@@ -167,11 +174,13 @@ public class TableGUI {
                             //ако е второто натискане, избираш мястото, на което да бъде
                             // поместена фигурата
                             clearBorder(boardPanel.boardTiles.get(sourceTile.getX() * 8 + sourceTile.getY()));
-
+                            PlayingPiece.setIsOnlyTesting(true);
                             if (!Play.isSameColor(tileX, tileY) && sourceTile.moveIsLegal(tileX, tileY)) {
+                                PlayingPiece.setIsOnlyTesting(false);
                                 Play.tryToMakeMove(sourceTile.getX(), sourceTile.getY(), tileX, tileY);
                             }
 
+                            PlayingPiece.setIsOnlyTesting(false);
                             boardPanel.drawBoard();
 
                             if (Play.madeMove) {

@@ -28,6 +28,7 @@ public class Play {
                 TableGUI.endGame("Blacks");
             } else if (chessResult == 2) {
                 System.out.println("? Chess! Move or you'll lose.");
+                TableGUI.checkMateMessage("Chess! Move or you'll lose.");
             }
         } else {
             chessResult = isCheckMateOrChess(kingBlack);
@@ -37,6 +38,7 @@ public class Play {
                 TableGUI.endGame("Whites");
             } else if (chessResult == 2) {
                 System.out.println("? Chess! Move or you'll lose.");
+                TableGUI.checkMateMessage("Chess! Move or you'll lose.");
             }
         }
 

@@ -17,11 +17,14 @@ public class Table {
     }
 
     public static void resetTable(){
+        aliveBlacks=new ArrayList<>();
+        aliveWhites=new ArrayList<>();
         table=new PlayingPiece[8][8];
         Play.setPieces();
         Play.setKingWhite(new King("white"));
         Play.setKingBlack(new King("black"));
         createTable();
+        Play.turn = 0;
     }
 
     public static void setStartingPosition(int x, int y, PlayingPiece piece) {

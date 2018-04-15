@@ -3,13 +3,13 @@ package Pieces;
 import java.util.ArrayList;
 
 public class PlayingPiece {
-    private static boolean isOnlyTesting=false;
+    private static boolean isOnlyTesting = false;
     private int x;
     private int y;
     private String color;
     private char symbol;
-    private ArrayList<Integer> pathX=new ArrayList<>();
-    private ArrayList<Integer> pathY=new ArrayList<>();
+    private ArrayList<Integer> pathX = new ArrayList<>();
+    private ArrayList<Integer> pathY = new ArrayList<>();
 
     public PlayingPiece(String color) {
         this.color = color;

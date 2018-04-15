@@ -3,7 +3,7 @@ package Pieces;
 public class Queen extends PlayingPiece {
     public Queen(String color) {
         super(color);
-        if (color == "white") {
+        if (color.equals("white")) {
             setSymbol('\u2655');
             Table.setStartingPosition(0, 4, this);
         } else {

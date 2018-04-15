@@ -2,8 +2,6 @@ package Pieces;
 
 import GUI.TableGUI;
 
-import java.util.ArrayList;
-
 public class Play {
     public static int turn = 1;
     public static boolean madeMove;
@@ -16,7 +14,7 @@ public class Play {
         TableGUI tableGUI = new TableGUI();
     }
 
-    public static void firstCheck() {
+    public static void firstChessCheck() {
         int originalTurn = Play.turn;
         int chessResult;
 
@@ -24,20 +22,16 @@ public class Play {
             chessResult = isCheckMateOrChess(kingWhite);
 
             if (chessResult == 1) {
-                System.out.println("? Game over! Black wins.");
                 TableGUI.endGame("Blacks");
             } else if (chessResult == 2) {
-                System.out.println("? Chess! Move or you'll lose.");
                 TableGUI.checkMateMessage("Chess! Move or you'll lose.");
             }
         } else {
             chessResult = isCheckMateOrChess(kingBlack);
 
             if (chessResult == 1) {
-                System.out.println("? Game over! White wins.");
                 TableGUI.endGame("Whites");
             } else if (chessResult == 2) {
-                System.out.println("? Chess! Move or you'll lose.");
                 TableGUI.checkMateMessage("Chess! Move or you'll lose.");
             }
         }
@@ -63,23 +57,17 @@ public class Play {
             currentColor = "white";
             currentKing = kingWhite;
 
-            System.out.println("White's turn");
         } else {
             currentKing = kingBlack;
-
-            System.out.println("Black's turn");
             currentColor = "black";
         }
 
         Table.play(Table.getObject(x, y).getColor(), currentColor, x, y, newX, newY);
-        Table.printTable();
 
         if (isCheckMateOrChess(currentKing) == 1 || isCheckMateOrChess(currentKing) == 2) {
             if (currentColor.equals("white")) {
-                System.out.println("2 Game over! Black wins.");
                 TableGUI.endGame("Blacks");
             } else {
-                System.out.println("2 Game over! White wins.");
                 TableGUI.endGame("Whites");
             }
         }
@@ -89,13 +77,13 @@ public class Play {
 
     private static int isCheckMateOrChess(PlayingPiece king) {
         if (king.getColor().equals("white")) {
-            if (Table.isChessMateWhites(king.getX(), king.getY())) {
+            if (Table.isCheckMateWhites(king.getX(), king.getY())) {
                 return 1;
             } else if (Table.isChessWhites(king.getX(), king.getY())) {
                 return 2;
             }
         } else if (king.getColor().equals("black")) {
-            if (Table.isChessMateBlacks(king.getX(), king.getY())) {
+            if (Table.isCheckMateBlacks(king.getX(), king.getY())) {
                 return 1;
             } else if (Table.isChessBlacks(king.getX(), king.getY())) {
                 return 2;
@@ -105,7 +93,6 @@ public class Play {
     }
 
     public static void setPieces() {
-        //TODO try to do this in some other way
         Pawn pawn1White = new Pawn("white");
         Pawn pawn2White = new Pawn("white");
         Pawn pawn3White = new Pawn("white");
@@ -114,7 +101,6 @@ public class Play {
         Pawn pawn6White = new Pawn("white");
         Pawn pawn7White = new Pawn("white");
         Pawn pawn8White = new Pawn("white");
-
         Rook rook1White = new Rook("white");
         Rook rook2White = new Rook("white");
         Knight knight1White = new Knight("white");
@@ -131,7 +117,6 @@ public class Play {
         Pawn pawn6Black = new Pawn("black");
         Pawn pawn7Black = new Pawn("black");
         Pawn pawn8Black = new Pawn("black");
-
         Rook rook1Black = new Rook("black");
         Rook rook2Black = new Rook("black");
         Knight knight1Black = new Knight("black");

@@ -3,7 +3,7 @@ package Pieces;
 public class Knight extends PlayingPiece {
     public Knight(String color) {
         super(color);
-        if (color == "white") {
+        if (color.equals("white")) {
             setSymbol('\u2658');
             if (Table.getObject(0, 1) == null) {
                 Table.setStartingPosition(0, 1, this);
@@ -33,11 +33,11 @@ public class Knight extends PlayingPiece {
                     newX == getX() - 2 && newY == getY() - 1 ||
                     newX == getX() - 2 && newY == getY() + 1 ||
                     newX == getX() - 1 && newY == getY() + 2) {
-                if(Table.canTakePiece(newX, newY, this)){
+                if (Table.canTakePiece(newX, newY, this)) {
                     getPathX().add(newX);
                     getPathY().add(newY);
                     return true;
-                }else {
+                } else {
                     return false;
                 }
             } else {

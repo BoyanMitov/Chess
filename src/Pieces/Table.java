@@ -16,10 +16,10 @@ public class Table {
         createTable();
     }
 
-    public static void resetTable(){
-        aliveBlacks=new ArrayList<>();
-        aliveWhites=new ArrayList<>();
-        table=new PlayingPiece[8][8];
+    public static void resetTable() {
+        aliveBlacks = new ArrayList<>();
+        aliveWhites = new ArrayList<>();
+        table = new PlayingPiece[8][8];
         Play.setPieces();
         Play.setKingWhite(new King("white"));
         Play.setKingBlack(new King("black"));
@@ -50,20 +50,6 @@ public class Table {
         }
     }
 
-    public static void printTable() {
-        System.out.println("\u3000  0\u30001\u30002\u30003\u30004\u30005\u30006\u30007");
-
-        for (int row = 0; row < 8; row++) {
-            System.out.print(row + " ");
-            System.out.print("|");
-            for (int col = 0; col < 8; col++) {
-                System.out.print(table[row][col].getSymbol() + "|");
-
-            }
-            System.out.println();
-        }
-    }
-
     public static void play(String color, String currentColor, int fromX, int fromY, int toX, int toY) {
         if (currentColor.equals(color)) {
             if (table[fromX][fromY].moveIsLegal(toX, toY)) {
@@ -77,14 +63,9 @@ public class Table {
                 table[toX][toY] = swap;
                 Play.madeMove = true;
             } else {
-                System.out.println("Can't go there!");
                 Play.turn--;
             }
-        } else if (!color.equals("none")) {
-            System.out.println("It's not your turn!");
-            Play.turn--;
         } else {
-            System.out.println("That's empty!Try again.");
             Play.turn--;
         }
     }
@@ -112,15 +93,15 @@ public class Table {
         table[x][y] = empty;
     }
 
-    public static boolean isChessMateWhites(int kingX, int kingY) {
-        return isChessMate(kingX, kingY, aliveBlacks, aliveWhites);
+    public static boolean isCheckMateWhites(int kingX, int kingY) {
+        return isCheckMate(kingX, kingY, aliveBlacks, aliveWhites);
     }
 
-    public static boolean isChessMateBlacks(int kingX, int kingY) {
-        return isChessMate(kingX, kingY, aliveWhites, aliveBlacks);
+    public static boolean isCheckMateBlacks(int kingX, int kingY) {
+        return isCheckMate(kingX, kingY, aliveWhites, aliveBlacks);
     }
 
-    private static boolean isChessMate(int x, int y, ArrayList<PlayingPiece> enemy
+    private static boolean isCheckMate(int x, int y, ArrayList<PlayingPiece> enemy
             , ArrayList<PlayingPiece> ally) {
         boolean hasOpenSpace = false;
         for (int row = x - 1; row <= x + 1; row++) {
@@ -131,13 +112,13 @@ public class Table {
                         temporaryMoveKing(row, col, x, y);
 
                         if (row != x || col != y) {
-                            if (!enemyCanReachChessMate(row, col, enemy)) {
+                            if (!enemyCanReachCheckMate(row, col, enemy)) {
 
                                 moveKingBack(row, col, x, y);
                                 return false;
                             }
                         } else {
-                            if (ally.size() > 1 && !enemyCanReachChessMate(row, col, enemy)) {
+                            if (ally.size() > 1 && !enemyCanReachCheckMate(row, col, enemy)) {
                                 moveKingBack(row, col, x, y);
                                 return false;
                             }
@@ -153,7 +134,7 @@ public class Table {
                         enemy.remove(table[row][col]);
                         table[row][col] = king;
 
-                        if (!enemyCanReachChessMate(row, col, enemy)) {
+                        if (!enemyCanReachCheckMate(row, col, enemy)) {
                             moveKingBack(king, takenEnemy, enemy, row, col, x, y);
                             return false;
                         }
@@ -162,10 +143,7 @@ public class Table {
                 }
             }
         }
-        if (!hasOpenSpace) {
-            return false;
-        }
-        return true;
+        return hasOpenSpace;
     }
 
     private static void temporaryMoveKing(int row, int col, int kingX, int kingY) {
@@ -195,7 +173,7 @@ public class Table {
         return false;
     }
 
-    public static boolean enemyCanReachChessMate(int x, int y, ArrayList<PlayingPiece> enemy) {
+    public static boolean enemyCanReachCheckMate(int x, int y, ArrayList<PlayingPiece> enemy) {
         for (int i = 0; i < enemy.size(); i++) {
             if (enemy.get(i).moveIsLegal(x, y) && !allyCanSaveKing(enemy.get(i), enemy)) {
                 return true;

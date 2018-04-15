@@ -1,9 +1,9 @@
 package Pieces;
 
 public class Bishop extends PlayingPiece {
-    public Bishop(String color) {
+    Bishop(String color) {
         super(color);
-        if (color == "white") {
+        if (color.equals("white")) {
             setSymbol('\u2657');
             if (Table.getObject(0, 2) == null) {
                 Table.setStartingPosition(0, 2, this);

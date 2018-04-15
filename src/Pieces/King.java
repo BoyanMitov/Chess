@@ -3,7 +3,7 @@ package Pieces;
 public class King extends PlayingPiece {
     public King(String color) {
         super(color);
-        if (color == "white") {
+        if (color.equals("white")) {
             setSymbol('\u2654');
 
             Table.setKingWhite(0, 3, this);

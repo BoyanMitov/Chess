@@ -26,27 +26,58 @@ public class TableGUI {
     private final BoardPanel boardPanel;
 
     private PlayingPiece sourceTile;
+    private static String pieceIconPath = "art/pieces/";
 
     private final static Dimension OUTER_FRAME_DIMENSION = new Dimension(600, 600);
     private final static Dimension BOARD_PANEL_DIMENSION = new Dimension(400, 350);
     private final static Dimension TILE_PANEL_DIMENSION = new Dimension(10, 10);
 
-    private final Color darkTileColor = new Color(65,43,37);
-    private final Color lightTileColor = new Color(170,143,119);
-
-
-    private static String pieceIconPath = "art/pieces/";
+    private final Color darkTileColor = new Color(65, 43, 37);
+    private final Color lightTileColor = new Color(170, 143, 119);
 
     public TableGUI() {
-        this.gameFrame = new JFrame("Chess Game");
-        this.gameFrame.setLayout(new BorderLayout());
+        gameFrame = new JFrame("Chess Game");
+        gameFrame.setLayout(new BorderLayout());
         final JMenuBar tableMenuBar = createTableMenuBar();
-        this.gameFrame.setJMenuBar(tableMenuBar);
-        this.gameFrame.setSize(OUTER_FRAME_DIMENSION);
+        gameFrame.setJMenuBar(tableMenuBar);
+        gameFrame.setSize(OUTER_FRAME_DIMENSION);
         this.boardPanel = new BoardPanel();
-        this.gameFrame.add(this.boardPanel, BorderLayout.CENTER);
-        this.gameFrame.setVisible(true);
+        gameFrame.add(this.boardPanel, BorderLayout.CENTER);
+        gameFrame.setVisible(true);
     }
+
+    private JMenuBar createTableMenuBar() {
+        final JMenuBar tableMenuBar = new JMenuBar();
+        tableMenuBar.add(createFileMenu());
+        return tableMenuBar;
+    }
+
+    private JMenu createFileMenu() {
+        final JMenu fileMenu = new JMenu("File");
+        final JMenuItem newGameMenuItem = new JMenuItem("New Game");
+        final JMenuItem exitMenuItem = new JMenuItem("Exit");
+
+        newGameMenuItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Table.resetTable();
+                Play.turn = 1;
+                boardPanel.drawBoard();
+            }
+        });
+
+        exitMenuItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.exit(0);
+            }
+        });
+
+        fileMenu.add(newGameMenuItem);
+        fileMenu.add(exitMenuItem);
+        return fileMenu;
+    }
+
 
     public static void endGame(String winner) {
         Object[] options = {"Start new game",
@@ -65,47 +96,15 @@ public class TableGUI {
 
         } else if (n == JOptionPane.NO_OPTION) {
             System.exit(0);
-        }else{
+        } else {
             System.exit(0);
         }
     }
 
     public static void checkMateMessage(String message) {
-        JOptionPane.showMessageDialog(null,message);
+        JOptionPane.showMessageDialog(null, message);
     }
 
-
-    private JMenuBar createTableMenuBar() {
-        final JMenuBar tableMenuBar = new JMenuBar();
-        tableMenuBar.add(createFileMenu());
-        return tableMenuBar;
-    }
-
-    private JMenu createFileMenu() {
-        final JMenu fileMenu = new JMenu("File");
-        final JMenuItem newGameMenuItem = new JMenuItem("New Game");
-        final JMenuItem exitMenuItem = new JMenuItem("Exit");
-
-        newGameMenuItem.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                Table.resetTable();
-                boardPanel.drawBoard();
-            }
-        });
-
-        //creates field exit in the menu
-        exitMenuItem.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                System.exit(0);
-            }
-        });
-
-        fileMenu.add(newGameMenuItem);
-        fileMenu.add(exitMenuItem);
-        return fileMenu;
-    }
 
     private class BoardPanel extends JPanel {
         final List<TilePanel> boardTiles;
@@ -148,84 +147,80 @@ public class TableGUI {
             setPreferredSize(TILE_PANEL_DIMENSION);
             assignTileColor();
             assignTilePieceIcon();
+            mouseClickedAction();
+            validate();
+        }
 
+        private void mouseClickedAction() {
             addMouseListener(new MouseListener() {
                 @Override
                 public void mouseClicked(MouseEvent e) {
-                    //десен бутон се използва за да деселектираш дадено поле, в случай че
-                    // искаш да направиш друг ход, а не този, който си започнал
+                    //right button deselects tile
                     if (isRightMouseButton(e)) {
                         if (sourceTile != null) {
                             clearBorder(boardPanel.boardTiles.get(sourceTile.getX() * 8 + sourceTile.getY()));
                         }
                         sourceTile = null;
                     } else if (isLeftMouseButton(e)) {
-                        if (sourceTile == null) {
-                            //ако е първото натискане на ляв бутон, значи избираш фигурата,
-                            // която искаш да поместиш
-                            sourceTile = Table.getObject(tileX, tileY);
-                            if (sourceTile == null || sourceTile == Table.getEmptyObject()) {
-                                sourceTile = null;
-                            } else {
-                                assignTileBorder();
-                                Play.firstCheck();
-                            }
-                        } else {
-                            //ако е второто натискане, избираш мястото, на което да бъде
-                            // поместена фигурата
-                            clearBorder(boardPanel.boardTiles.get(sourceTile.getX() * 8 + sourceTile.getY()));
-                            PlayingPiece.setIsOnlyTesting(true);
-                            if (!Play.isSameColor(tileX, tileY) && sourceTile.moveIsLegal(tileX, tileY)) {
-                                PlayingPiece.setIsOnlyTesting(false);
-                                Play.tryToMakeMove(sourceTile.getX(), sourceTile.getY(), tileX, tileY);
-                            }
-
-                            PlayingPiece.setIsOnlyTesting(false);
-                            boardPanel.drawBoard();
-
-                            if (Play.madeMove) {
-                                //това са индексите на двата бутона в листа boardTiles
-                                int tileIndex = sourceTile.getX() * 8 + sourceTile.getY();
-                                int newTileIndex = tileX * 8 + tileY;
-                                //в boardTiles слагаме бутона, съдържат фигурага за местене, на
-                                // мястото на бутона, съдържащ мястото, на което да бъде преместена
-                                boardPanel.boardTiles.add(newTileIndex, boardPanel.boardTiles.get(tileIndex));
-                                //премахваме бутона от старото му място в boardTiles
-                                boardPanel.boardTiles.remove(tileIndex);
-                                boardPanel.drawBoard();
-                            }
-                            Play.madeMove = false;
-                            sourceTile = null;
-
-                        }
+                        actionOnLeftMouseButton();
                     }
                 }
 
                 @Override
                 public void mousePressed(MouseEvent e) {
-
                 }
 
                 @Override
                 public void mouseReleased(MouseEvent e) {
-
                 }
 
                 @Override
                 public void mouseEntered(MouseEvent e) {
-
                 }
 
                 @Override
                 public void mouseExited(MouseEvent e) {
-
                 }
             });
-
-            validate();
         }
 
-        public void drawTile() {
+        private void actionOnLeftMouseButton() {
+            if (sourceTile == null) {
+                //first time clicking the left button
+                sourceTile = Table.getObject(tileX, tileY);
+                if (sourceTile == null || sourceTile == Table.getEmptyObject()) {
+                    sourceTile = null;
+                } else {
+                    assignTileBorder();
+                    Play.firstChessCheck();
+                }
+            } else {
+                //second time clicking the left button
+                clearBorder(boardPanel.boardTiles.get(sourceTile.getX() * 8 + sourceTile.getY()));
+                PlayingPiece.setIsOnlyTesting(true);
+
+                if (!Play.isSameColor(tileX, tileY) && sourceTile.moveIsLegal(tileX, tileY)) {
+                    PlayingPiece.setIsOnlyTesting(false);
+                    Play.tryToMakeMove(sourceTile.getX(), sourceTile.getY(), tileX, tileY);
+                }
+
+                PlayingPiece.setIsOnlyTesting(false);
+                boardPanel.drawBoard();
+
+                if (Play.madeMove) {
+                    int tileIndex = sourceTile.getX() * 8 + sourceTile.getY();
+                    int newTileIndex = tileX * 8 + tileY;
+                    boardPanel.boardTiles.add(newTileIndex, boardPanel.boardTiles.get(tileIndex));
+                    boardPanel.boardTiles.remove(tileIndex);
+                    boardPanel.drawBoard();
+                }
+
+                Play.madeMove = false;
+                sourceTile = null;
+            }
+        }
+
+        void drawTile() {
             assignTileColor();
             assignTilePieceIcon();
             validate();
@@ -256,11 +251,6 @@ public class TableGUI {
 
             if (tablePiece != Table.getEmptyObject()) {
                 try {
-                    /*
-                    задава директорията на иконата на фигурата, като към директорията на папката,
-                     в която се намират иконите(съхранена в променливата pieceIconPath),добавя
-                     първата буква на цвета, първите 2 букви на името на класа и накрая .gif
-                    */
                     BufferedImage image = ImageIO.read(new File(pieceIconPath
                             + tablePiece.getColor().substring(0, 1).toUpperCase()
                             + tablePiece.getClass().getSimpleName().substring(0, 2).toUpperCase()

@@ -5,7 +5,7 @@ public class Pawn extends PlayingPiece {
 
     public Pawn(String color) {
         super(color);
-        if (color == "white") {
+        if (color.equals("white")) {
             setSymbol('\u2659');
             for (int col = 0; col < 8; col++) {
                 if (Table.getObject(1, col) == null) {
@@ -57,7 +57,7 @@ public class Pawn extends PlayingPiece {
                     getPathX().add(newX);
                     getPathY().add(newY);
                     return true;
-                }else{
+                } else {
                     return false;
                 }
             }
@@ -71,11 +71,11 @@ public class Pawn extends PlayingPiece {
     private boolean moveIsLegalBlacks(int newX, int newY) {
         if (newY == getY() && Table.getObject(newX, newY) == Table.getEmptyObject()) {
             if (startX != this.getX()) {
-                if(newX == getX() - 1){
+                if (newX == getX() - 1) {
                     getPathX().add(newX);
                     getPathY().add(newY);
                     return true;
-                }else{
+                } else {
                     return false;
                 }
             } else {
@@ -98,7 +98,7 @@ public class Pawn extends PlayingPiece {
     private boolean canTakePiece(int newX, int newY) {
         if (!Table.getObject(newX, newY).getColor().equals(this.getColor())
                 && Table.getObject(newX, newY) != Table.getEmptyObject()) {
-            if(!isIsOnlyTesting()){
+            if (!isIsOnlyTesting()) {
                 Table.takePiece(newX, newY);
             }
             getPathX().add(newX);
